@@ -356,7 +356,7 @@ header.bar{display:none}
 <script>
 /* ---------- config ---------- */
 // Set API to the deployed votes endpoint, e.g. "https://votes.example.workers.dev". Empty = preview mode (votes stay on this device).
-const API = "";
+const API = "https://inner-garden-votes.buritica.workers.dev";
 const EXP_ID = "inner-garden-2026-10";
 
 /* ---------- data ---------- */
@@ -447,11 +447,18 @@ async function loadAgg(){
     agg={love,pick,voters:(mine.love.length||mine.pick)?1:0,local:true};return agg}
   try{agg=await api(`/results?exp=${EXP_ID}`)}catch(_){agg=agg||{love:{},pick:{},voters:0,offline:true}}
   return agg}
+const postVote=(kind,payload)=>api("/vote",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({exp:EXP_ID,voter:me,kind,...payload})});
+let outbox=LS.get("ig.outbox",[]);
+async function flush(){
+  while(outbox.length){const o=outbox[0];try{await postVote(o.kind,o.payload)}catch(e){const c=+e.message;if(!(c>=400&&c<500&&c!==429))return false}outbox.shift();LS.set("ig.outbox",outbox)}return true}
 async function send(kind,payload){
-  if(!API){return}
-  try{await api("/vote",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({exp:EXP_ID,voter:me,kind,...payload})})}
-  catch(_){toast("Saved on this device. Will sync when online.")}
-}
+  if(!API)return;
+  outbox.push({kind,payload});LS.set("ig.outbox",outbox);
+  if(!(await flush()))toast("Saved on this device. Will sync when online.")}
+addEventListener("online",()=>flush().then(()=>loadAgg()));
+// one-time: push votes cast on this device before the counter existed
+if(API&&!LS.get("ig.synced",false)){mine.love.forEach(k=>outbox.push({kind:"love",payload:{garden:k,on:true}}));if(mine.pick)outbox.push({kind:"pick",payload:{garden:mine.pick,on:true}});LS.set("ig.outbox",outbox);LS.set("ig.synced",true)}
+
 async function toggleLove(k){
   const on=!mine.love.includes(k);
   mine.love=on?[...mine.love,k]:mine.love.filter(x=>x!==k);saveMine();
@@ -744,7 +751,7 @@ addEventListener("scroll",()=>{if(!heroRaf)heroRaf=requestAnimationFrame(heroUpd
 // always start at the top on reload: the browser's own restore fights the late render and lands mid-hero
 if('scrollRestoration' in history)history.scrollRestoration='manual';
 addEventListener('pageshow',e=>{if(e.persisted)scrollTo(0,0)});
-loadAgg().then(()=>route(false));
+flush().then(()=>loadAgg()).then(()=>route(false));
 route(false);
 </script>
 </body></html>

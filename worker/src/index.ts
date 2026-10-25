@@ -1,6 +1,6 @@
 import { env } from "cloudflare:workers";
 
-const GARDENS = new Set(["oudolf-2","oudolf-matrix-h","oudolf-red-stones","nakane-melastome-3","nakane-melastome-tree-4","nakane-inset-2","log-black-1","plate-oudolf-1","columns-oudolf-1","tree-oudolf-2"]);
+const GARDENS = new Set(["oudolf-2","oudolf-matrix-h","oudolf-red-stones","matrix-boulders-1","nakane-melastome-3","nakane-melastome-tree-4","nakane-inset-2","log-black-1","plate-oudolf-1","columns-oudolf-1","tree-oudolf-2"]);
 const ORIGINS = new Set(["https://pages.buriti.ca","https://ca-bu.riti.ca"]);
 const cors = (req: Request) => {
 	const o = req.headers.get("origin") ?? "";

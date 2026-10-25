@@ -380,6 +380,12 @@ const G = [
  plants:[["Maroon-leaf shrubs","Begonia or Miconia","foliage"],["Fuchsia","Fuchsia","color"],["Bomarea","Bomarea","color"],["Tall grasses","Chusquea or Cortaderia","height"],["Dark ferns","","ground"],["Moss","","ground"]],
  watch:"Red foliage fades toward green in low light; the dark leaves need the brightest spots under the opening.",
  mood3:[4,2,4]},
+{k:"matrix-boulders-1",n:"Matrix and boulders",mood:"Lush",one:"The matrix planting around a black boulder group, a melastome in full bloom.",
+ insp:["Piet Oudolf","Kinsaku Nakane"],ground:"Moss and raked black gravel",hard:"Three glossy black boulders, tall one at the back",tall:"About 2.6 m (tree ferns)",care:3,
+ look:"Oudolf's matrix on one side, Nakane's boulders on the other: grass plumes and ferns lead to a black stone group that a pink-flowered melastome grows through, tree ferns at both ends.",
+ plants:[["Tree fern","Cyathea","canopy"],["Melastome shrub","Miconia or Leandra","hero"],["Plume grass","Chusquea or a native sedge","matrix"],["Ferns","Blechnum, Pteris","understory"],["Bromeliads","Guzmania","accent"],["Moss","","ground"]],
+ watch:"The melastome needs room to arch over the stones and flowers best with some light. Keep the rock group stable and low-maintenance, and let the matrix thin toward it.",
+ mood3:[4,3,3]},
 {k:"nakane-melastome-3",n:"Boulders and melastome",mood:"Japanese",one:"A huge arching melastome swallowing a boulder triad.",
  insp:["Kinsaku Nakane"],ground:"Moss mounds in raked black gravel",hard:"A tall boulder triad at the right",tall:"About 2.3 m (the melastome)",care:3,
  look:"Clean moss mounds and black gravel, one huge melastome arching over and engulfing the boulders. Control against volunteer growth.",
@@ -488,7 +494,7 @@ function home(){
   const list=G.filter(g=>filt==="All"||g.mood===filt);
   return `
   <section class="hero" id="hero" style="--run:${(G.length+1)*70}svh">${snapMarks()}<div class="hstage">
-   <div class="pic" id="hpic" data-imm="${G[0].k}" data-v="${PH()?"side":"front"}"><picture><source media="(max-aspect-ratio:1/1)" srcset="img/empty-side-h.jpg"><img class="l0" data-hi="img/empty-4k.jpg" data-hs="img/empty-side.jpg" src="img/empty-4k-h.jpg" alt="The empty garden: a board-formed concrete wall, bare earth and a pane of glass"></picture>${G.map((g,i)=>`<picture><source media="(max-width:560px)" srcset="img/${g.k}-sh.jpg"><img class="gi ${i?"":"l1"}" ${i?"":'fetchpriority="high" '}data-hi="img/${g.k}-f.jpg" data-hs="img/${g.k}-s.jpg" src="img/${g.k}-fh.jpg" alt="${esc(g.n)}"></picture>`).join("")}<h1 class="ht">The inner garden</h1>
+   <div class="pic" id="hpic" data-imm="${G[0].k}" data-v="${PH()?"side":"front"}"><picture><source media="(max-aspect-ratio:1/1)" srcset="img/empty-side-h.jpg"><img class="l0" data-hi="img/empty-4k.jpg" data-hs="img/empty-side.jpg" src="img/empty-4k-h.jpg" alt="The empty garden: a board-formed concrete wall, bare earth and a pane of glass"></picture>${G.map((g,i)=>`<picture><source media="(max-width:560px)" srcset="img/${g.k}-sh.jpg"><img class="gi ${i?"":"l1"}" ${i?"":'fetchpriority="high" '}data-hi="img/${g.k}-m.jpg" data-hs="img/${g.k}-n.jpg" src="img/${g.k}-fh.jpg" alt="${esc(g.n)}"></picture>`).join("")}<h1 class="ht">The inner garden</h1>
    <div class="hcap" id="hintro"><span class="lab" id="hlab">The strip today · scroll to plant it</span></div>
    <div class="pgbar hbar" id="hbar" style="opacity:0;visibility:hidden"><div class="pgt"><span class="lab" id="hnum"></span><h3 id="hname"></h3></div>
     <div class="pgact"><a class="pillbtn detailbtn" id="hdet" href="#/g/${G[0].k}">See detail</a><button class="pillbtn" id="hheart" data-love="${G[0].k}" aria-label="Love">${heart}</button></div></div></div>
@@ -501,7 +507,7 @@ function detail(k){
   return `<div class="detail dd"><div class="dtop"><a class="crumb" href="#gardens-top" data-home aria-label="All gardens">←<span class="ct"> All gardens</span></a>
   <h1>${esc(g.n)}</h1><span class="lab">${num(k)} · ${g.mood}${g.insp.length?" · after "+esc(g.insp.join(" and ")):""}</span></div>
   <div class="fwrap" id="fwrap"><a class="fnav l" href="#/g/${p.k}" aria-label="Previous: ${esc(p.n)}" title="${esc(p.n)}"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></a>
-  <div class="frame ${pv==="side"?"sideph":""}" data-imm="${k}" data-v="${pv}" role="button" tabindex="0" aria-label="Open the ${pv} view full screen"><img src="img/${k}-${pv==="side"?"s":"f"}.jpg" alt="${esc(g.n)}, ${pv} view"><div class="acts"><div class="seg"><button data-dv="front" class="${pv==="front"?"on":""}">Front</button><button data-dv="side" class="${pv==="side"?"on":""}">Side</button></div><button class="enter" tabindex="-1">Step inside ⤢</button></div></div>
+  <div class="frame ${pv==="side"?"sideph":""}" data-imm="${k}" data-v="${pv}" role="button" tabindex="0" aria-label="Open the ${pv} view full screen"><img src="img/${k}-${pv==="side"?"n":"m"}.jpg" alt="${esc(g.n)}, ${pv} view"><div class="acts"><div class="seg"><button data-dv="front" class="${pv==="front"?"on":""}">Front</button><button data-dv="side" class="${pv==="side"?"on":""}">Side</button></div><button class="enter" tabindex="-1">Step inside ⤢</button></div></div>
   <a class="fnav r" href="#/g/${n.k}" aria-label="Next: ${esc(n.n)}" title="${esc(n.n)}"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></a></div>
   <div class="dlow"><p class="dlook">${esc(g.look)}</p>${voteBox(g)}</div>
   <div class="dgrid"><div><div class="lab" style="margin-bottom:12px">Proposed plants</div>
@@ -524,8 +530,8 @@ function preload(u){if(_pre.has(u))return;_pre.add(u);const i=new Image();i.src=
 const idle=f=>("requestIdleCallback" in window)?requestIdleCallback(f,{timeout:2500}):setTimeout(f,600);
 const saver=()=>navigator.connection?.saveData;
 function preloadDetail(k){idle(()=>{if(saver())return;
-  ["s","f"].forEach(v=>preload(`img/${k}-${v}.jpg`));
-  const i=G.findIndex(g=>g.k===k),first=(detail.v||(PH()?"side":"front"))==="side"?"s":"f";
+  ["n","m"].forEach(v=>preload(`img/${k}-${v}.jpg`));
+  const i=G.findIndex(g=>g.k===k),first=(detail.v||(PH()?"side":"front"))==="side"?"n":"m";
   [1,-1].forEach(d=>{const n=G[(i+d+G.length)%G.length];preload(`img/${n.k}-${first}.jpg`)})})}
 /* once the small hero images are all in, swap in the large ones one by one, in scroll order */
 function upgradeHero(){
@@ -540,7 +546,7 @@ function upgradeHero(){
       await new Promise(r=>setTimeout(r,120))}
     // then the viewer's small previews for every garden, and on desktop the other (side) view too
     G.forEach(g=>{preload(`img/${g.k}-st.jpg`);preload(`img/${g.k}-t.jpg`)});
-    if(!ph&&(navigator.connection?.effectiveType||"4g")==="4g")for(const g of G){await new Promise(r=>setTimeout(r,250));preload(`img/${g.k}-s.jpg`)}}))}
+    if(!ph&&(navigator.connection?.effectiveType||"4g")==="4g")for(const g of G){await new Promise(r=>setTimeout(r,250));preload(`img/${g.k}-n.jpg`)}}))}
 function preloadHome(){upgradeHero()}
 /* ---------- router ---------- */
 const app=$("#app");
@@ -569,7 +575,7 @@ const V={W:0,H:0,fw:0,fh:0,f:1,zmax:4};
 const MOB=matchMedia("(pointer:coarse)").matches||Math.min(innerWidth,innerHeight)<700;
 // phones decode huge JPEGs at reduced size, so they get a 4096-wide hi-res instead of the full 6336
 const HINAT={front:MOB?4096:6336,side:MOB?2160:3072};
-const src=(k,v,big)=>`img/${k}-${v==="side"?(big?(MOB?"SM":"S"):"s"):(big?(MOB?"FM":"F"):"f")}.jpg`;
+const src=(k,v,big)=>`img/${k}-${v==="side"?(big?(MOB?"SM":"s"):"n"):(big?(MOB?"FM":"f"):"m")}.jpg`;
 function metrics(){const r=stage.getBoundingClientRect();V.W=r.width;V.H=r.height;const[nw,nh]=DIM[view];V.f=Math.min(V.W/nw,V.H/nh);V.fw=nw*V.f;V.fh=nh*V.f;V.zmax=Math.max(2.5,Math.min(8,(devicePixelRatio>1?1.5:1)*HINAT[view]/V.fw))}
 function clampPan(){const w=V.fw*z,h=V.fh*z;
   tx=w<=V.W?(V.W-w)/2:Math.min(0,Math.max(V.W-w,tx));
@@ -592,7 +598,7 @@ function minimap(){
   const l=w<=V.W?0:-tx/w,t=h<=V.H?0:-ty/h,vw=Math.min(1,V.W/w),vh=Math.min(1,V.H/h);
   i.style.left=l*100+"%";i.style.top=t*100+"%";i.style.width=vw*100+"%";i.style.height=vh*100+"%"}
 // progressive: thumbnail -> 2800 -> 4096 -> full, each step only when the zoom needs it (phones stop at 4096 to stay inside their decode limit)
-const TIERS=v=>v==="side"?["s","SM","S"]:["f","FM","F"];
+const TIERS=v=>v==="side"?["n","SM","s"]:["m","FM","f"];
 function wantTier(){
   const cap=MOB?1:2,need=z>1.8?2:(z>1.08?1:0),t=Math.min(need,cap);
   if(t<=tier||t<=pend)return;

@@ -362,6 +362,12 @@ const EXP_ID = "inner-garden-2026-10";
 /* ---------- data ---------- */
 const MOODS = ["Lush","Japanese","Sculptural"];
 const G = [
+{k:"matrix-boulders-1",n:"Matrix and boulders",mood:"Lush",one:"The matrix planting around a black boulder group, a melastome in full bloom.",
+ insp:["Piet Oudolf","Kinsaku Nakane"],ground:"Moss and raked black gravel",hard:"Three glossy black boulders, tall one at the back",tall:"About 2.6 m (tree ferns)",care:3,
+ look:"Oudolf's matrix on one side, Nakane's boulders on the other: grass plumes and ferns lead to a black stone group that a pink-flowered melastome grows through, tree ferns at both ends.",
+ plants:[["Tree fern","Cyathea","canopy"],["Melastome shrub","Miconia or Leandra","hero"],["Plume grass","Chusquea or a native sedge","matrix"],["Ferns","Blechnum, Pteris","understory"],["Bromeliads","Guzmania","accent"],["Moss","","ground"]],
+ watch:"The melastome needs room to arch over the stones and flowers best with some light. Keep the rock group stable and low-maintenance, and let the matrix thin toward it.",
+ mood3:[4,3,3]},
 {k:"oudolf-2",n:"Matrix",mood:"Lush",one:"Grass plumes drifting through low green, a tree fern at each end.",
  insp:["Piet Oudolf"],ground:"Moss and raked black gravel",hard:"A few dark boulders, low and scattered",tall:"About 2.6 m (tree ferns)",care:2,
  look:"Oudolf's interwoven matrix, in native plants: golden grass plumes through low green, melastomes dotted like punctuation, a tree fern at each end.",
@@ -380,12 +386,6 @@ const G = [
  plants:[["Maroon-leaf shrubs","Begonia or Miconia","foliage"],["Fuchsia","Fuchsia","color"],["Bomarea","Bomarea","color"],["Tall grasses","Chusquea or Cortaderia","height"],["Dark ferns","","ground"],["Moss","","ground"]],
  watch:"Red foliage fades toward green in low light; the dark leaves need the brightest spots under the opening.",
  mood3:[4,2,4]},
-{k:"matrix-boulders-1",n:"Matrix and boulders",mood:"Lush",one:"The matrix planting around a black boulder group, a melastome in full bloom.",
- insp:["Piet Oudolf","Kinsaku Nakane"],ground:"Moss and raked black gravel",hard:"Three glossy black boulders, tall one at the back",tall:"About 2.6 m (tree ferns)",care:3,
- look:"Oudolf's matrix on one side, Nakane's boulders on the other: grass plumes and ferns lead to a black stone group that a pink-flowered melastome grows through, tree ferns at both ends.",
- plants:[["Tree fern","Cyathea","canopy"],["Melastome shrub","Miconia or Leandra","hero"],["Plume grass","Chusquea or a native sedge","matrix"],["Ferns","Blechnum, Pteris","understory"],["Bromeliads","Guzmania","accent"],["Moss","","ground"]],
- watch:"The melastome needs room to arch over the stones and flowers best with some light. Keep the rock group stable and low-maintenance, and let the matrix thin toward it.",
- mood3:[4,3,3]},
 {k:"nakane-melastome-3",n:"Boulders and melastome",mood:"Japanese",one:"A huge arching melastome swallowing a boulder triad.",
  insp:["Kinsaku Nakane"],ground:"Moss mounds in raked black gravel",hard:"A tall boulder triad at the right",tall:"About 2.3 m (the melastome)",care:3,
  look:"Clean moss mounds and black gravel, one huge melastome arching over and engulfing the boulders. Control against volunteer growth.",
@@ -532,7 +532,10 @@ const saver=()=>navigator.connection?.saveData;
 function preloadDetail(k){idle(()=>{if(saver())return;
   ["n","m"].forEach(v=>preload(`img/${k}-${v}.jpg`));
   const i=G.findIndex(g=>g.k===k),first=(detail.v||(PH()?"side":"front"))==="side"?"n":"m";
-  [1,-1].forEach(d=>{const n=G[(i+d+G.length)%G.length];preload(`img/${n.k}-${first}.jpg`)})})}
+  [1,-1].forEach(d=>{const n=G[(i+d+G.length)%G.length];preload(`img/${n.k}-${first}.jpg`)});
+  if(PH()&&!preloadDetail.all&&(navigator.connection?.effectiveType||"4g")==="4g"){preloadDetail.all=1;
+    const order=G.map((g,j)=>[Math.min((j-i+G.length)%G.length,(i-j+G.length)%G.length),g]).sort((x,y)=>x[0]-y[0]);
+    (async()=>{for(const[,g]of order){await new Promise(r=>setTimeout(r,400));preload(`img/${g.k}-m.jpg`);preload(`img/${g.k}-n.jpg`)}})()}})}
 /* once the small hero images are all in, swap in the large ones one by one, in scroll order */
 function upgradeHero(){
   const imgs=$$("#hpic img[data-hi]");if(!imgs.length||saver())return;
